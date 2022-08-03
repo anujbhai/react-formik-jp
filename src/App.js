@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {Routes, Route} from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import "./App.css";
+import Home from "./pages/Home";
+import Examples from "./pages/Examples";
+import Header from "./layouts/Header";
+import ResrvationForm from "./examples/MiniFormik";
+import Invitation from "./examples/Arrays";
+
+const App = () => {
+	return (
+		<>
+			<Header />
+
+			<div className="app-container">
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="examples" element={<Examples />}>
+						<Route
+							index
+							element={
+								<main style={{ padding: '1rem' }}>
+									<p>Select a form</p>
+								</main>
+							}
+						/>
+						<Route path="example1" element={<ResrvationForm />} />
+						<Route path="example2" element={<Invitation />} />
+					</Route>
+					<Route
+						path="*"
+						element={
+							<main style={{ padding: '1rem' }}>
+								<p>There&#39;s nothing here!!</p>
+							</main>
+						}
+					/>
+				</Routes>
+			</div>
+		</>
+	);
+};
 
 export default App;
