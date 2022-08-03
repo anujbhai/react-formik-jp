@@ -1,0 +1,12 @@
+ul {
+	list-style-type: none;
+}
+ul > li {
+	display: inline;
+	padding: 7px 12px;
+}
+ul > li > a {
+	text-decoration: none;
+	color: rgba( 63, 81, 181 );
+}
+

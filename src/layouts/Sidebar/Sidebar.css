@@ -1,0 +1,9 @@
+aside {
+	max-width: 300px;
+	background-color: #F0F0F0;
+	padding: 30px;
+	/* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.45) inset; */
+}
+aside ul > li {
+	display: block;
+}
