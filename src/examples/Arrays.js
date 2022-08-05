@@ -6,6 +6,7 @@ import {
 	FieldArray,
 	ErrorMessage,
 } from "formik";
+import * as Yup from "yup";
 
 import {Debug} from "../components/Debug";
 
@@ -31,31 +32,45 @@ const Invitation = () => {
 					}, 500);
 				}}
 			>
-				{({isSubmitting}) => (
-				<Form>
-					<div className="row">
-						<div className="col">
-							<Field name="friends[0].name">
-								{({field, form}) => (
-									<input {...field} type="text" placeholder="Jane Doe" />
+				{({values, isSubmitting}) => (
+					<Form>
+						<FieldArray name="friends">
+							{({push, remove}) => 
+
+							<>
+								{values.friends && values.friends.length > 0 && values.friends.map((friend, index) =>
+								<div className="row" key={index}>
+									<div className="col">
+										<Field name={`friends[${index}].name`}>
+											{({field, form}) => (
+												<input {...field} type="text" placeholder="Jane Doe" />
+											)}
+										</Field>
+									</div>
+
+									<div className="col">
+										<Field name={`friends[${index}].email`} type="email" placeholder="jane@example.com" />
+									</div>
+
+									<div className="col">
+										<button type="button" onClick={() => remove(0)}>X</button>
+									</div>
+								</div>
 								)}
-							</Field>
-						</div>
 
-						<div className="col">
-							<Field name="email" type="email" placeholder="jane@example.com" />
-						</div>
+								<button
+									type="button"
+									onClick={() => push({name: "", email: ""})}
+									className="secondary"
+								>Add Friend</button>
+							</>
+							}
+						</FieldArray>
 
-						<div className="col">
-							<button type="button">X</button>
-						</div>
-					</div>
+						<button type="submit" disabled={isSubmitting}>Invite</button>
 
-					<button type="submit" disabled={isSubmitting} className="secondary">Add Friend</button>
-					<button type="submit" disabled={isSubmitting}>Invite</button>
-
-					<Debug />
-				</Form>
+						<Debug />
+					</Form>
 				)}
 			</Formik>
 		</div>
