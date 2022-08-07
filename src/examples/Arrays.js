@@ -7,8 +7,10 @@ import {
 	ErrorMessage,
 } from "formik";
 import * as Yup from "yup";
+import {EditorState} from "draft-js";
 
 import {Debug} from "../components/Debug";
+import {RichEditorExample} from "../components/RichEditor1";
 
 const initialValues = {
 	friends: [
@@ -17,6 +19,7 @@ const initialValues = {
 			email: "",
 		},
 	],
+	editorState: EditorState.createEmpty(),
 };
 
 const Invitation = () => {
@@ -26,14 +29,27 @@ const Invitation = () => {
 
 			<Formik
 				initialValues={initialValues}
+				validationSchema={Yup.object({
+					friends: Yup.array().of(Yup.object({
+						name: Yup.string().required("Name is required"),
+						email: Yup.string()
+						.email("Invalid email!")
+						.required("Email is required"),
+					}))
+				})}
 				onSubmit={values => {
 					setTimeout(() => {
 						alert(JSON.stringify(values, null, 2));
 					}, 500);
 				}}
 			>
-				{({values, isSubmitting}) => (
+				{({values, errors, touched, isSubmitting, handleBlur, setFieldValue}) => (
 					<Form>
+						<RichEditorExample
+							onChange={setFieldValue}
+							onBlur={handleBlur}
+							editorState={values.editorState}
+						/>
 						<FieldArray name="friends">
 							{({push, remove}) => 
 
@@ -46,10 +62,16 @@ const Invitation = () => {
 												<input {...field} type="text" placeholder="Jane Doe" />
 											)}
 										</Field>
+										<ErrorMessage name={`friends[${index}].name`}>
+											{msg => <div className="field-error">{msg}</div>}
+										</ErrorMessage>
 									</div>
 
 									<div className="col">
 										<Field name={`friends[${index}].email`} type="email" placeholder="jane@example.com" />
+										<ErrorMessage name={`friends[${index}].email`}>
+											{msg => <div className="field-error">{msg}</div>}
+										</ErrorMessage>
 									</div>
 
 									<div className="col">
